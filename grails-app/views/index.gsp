@@ -19,6 +19,8 @@
 				border-radius: 0.6em;
 			}
 
+            table>.row>.col
+
 			.ie6 #status {
 				display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
 			}

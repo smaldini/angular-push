@@ -137,13 +137,29 @@ function errorHandler($scope, $location, Flash, response) {
 function ListCtrl($scope, $routeParams, $location, Grails, Flash, grailsEvents) {
 
     grailsEvents.on('afterInsert',function(data){
-        ListCtrl($scope, $routeParams, $location, Grails, Flash, grailsEvents);
+        if($scope.list){
+            $scope.$apply(function(){$scope.list.push(data);});
+        }
     });
     grailsEvents.on('afterDelete',function(data){
-        ListCtrl($scope, $routeParams, $location, Grails, Flash, grailsEvents);
+        var idx;
+        for(el in $scope.list){
+            if($scope.list[el].id == data.id){
+                idx = el;
+                break;
+            }
+        }
+        if($scope.list && idx){
+            $scope.$apply(function(){delete $scope.list[idx];});
+        }
     });
     grailsEvents.on('afterUpdate',function(data){
-        ListCtrl($scope, $routeParams, $location, Grails, Flash, grailsEvents);
+        for(el in $scope.list){
+            if($scope.list[el].id == data.id){
+                $scope.$apply(function(){$scope.list[el] = data;});
+                break;
+            }
+        }
     });
 
     Grails.list($routeParams, function(list, headers) {
@@ -160,19 +176,15 @@ function ListCtrl($scope, $routeParams, $location, Grails, Flash, grailsEvents) 
 function ShowCtrl($scope, $routeParams, $location, Grails, Flash, grailsEvents) {
     $scope.message = Flash.getMessage();
 
-    grailsEvents.on('afterInsert',function(data){
-        if(data.id == $routeParams.id){
-            ShowCtrl($scope, $routeParams, $location, Grails, Flash, grailsEvents);
-        }
-    });
     grailsEvents.on('afterDelete',function(data){
         if(data.id == $routeParams.id){
-            ShowCtrl($scope, $routeParams, $location, Grails, Flash, grailsEvents);
+            Flash.success("Element deleted!");
+            $location.path('/list');
         }
     });
     grailsEvents.on('afterUpdate',function(data){
         if(data.id == $routeParams.id){
-            ShowCtrl($scope, $routeParams, $location, Grails, Flash, grailsEvents);
+            $scope.$apply(function(){$scope.item = data;});
         }
     });
 

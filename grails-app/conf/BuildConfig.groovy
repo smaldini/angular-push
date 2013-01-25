@@ -8,6 +8,8 @@ grails.project.dependency.resolution = {
 
     // inherit Grails' default dependencies
     inherits("global") {
+        excludes 'grails-plugin-filters',
+                "grails-plugin-mimetypes"
     }
 
     log "error" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
@@ -27,7 +29,8 @@ grails.project.dependency.resolution = {
 
 
     plugins {
-        compile ":events-push:1.0.M6"
+        compile ":events-push:1.0.M7"
+        compile ":vertx:1.0-SNAPSHOT"
         runtime ":angular-scaffolding:1.0-SNAPSHOT"
         runtime ":hibernate:$grailsVersion"
         runtime ":jquery:1.8.3"
